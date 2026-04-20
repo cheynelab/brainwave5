@@ -22,7 +22,7 @@
     fig_handles = [];
 
     BW_VERSION = 5.3;
-    RELEASE_DATE = 'April 14, 2026';
+    RELEASE_DATE = 'April 20, 2026';
     
     % check Matlab version
     versionStr = version;
@@ -227,7 +227,7 @@
 
     GUIDE_MENU = uimenu(HELP_MENU,'label','User Guides');
     uimenu(GUIDE_MENU,'label','QuickStart Guide...','Callback',@BW_GUIDE_CALLBACK);
-    uimenu(GUIDE_MENU,'label','DataPlot / Dipole Fitting...','Callback',@DIPOLE_GUIDE_CALLBACK);
+    uimenu(GUIDE_MENU,'label','DataPlot / Dipole Fit...','separator','on','Callback',@DIPOLE_GUIDE_CALLBACK);
     uimenu(GUIDE_MENU,'label','Beamformer Analysis...','Callback',@BEAM_GUIDE_CALLBACK);
     uimenu(GUIDE_MENU,'label','Group Analysis...','Callback',@GROUP_GUIDE_CALLBACK);
     uimenu(HELP_MENU,'label','About Brainwave...','separator','on','Callback',@ABOUT_MENU_CALLBACK);
@@ -235,11 +235,12 @@
     
     function BW_GUIDE_CALLBACK(~,~)
                
-        if 0   % to open README.md in gitlab   
+        if 0   % to open README.md in gitlab instead of PDF  
           url = 'https://git.ccm.sickkids.ca/cheyne-lab/brainwave5/-/blob/master/README.md';
           web(url)        
         else
             file = sprintf('%s%sQuickStart_Guide.pdf', DOC_PATH, filesep);
+            % try to open with evince on Linux...
             if ~ismac && isunix 
                 cmd = sprintf('evince %s', file);
                 system(cmd);
@@ -261,14 +262,14 @@
     end
 
     function BEAM_GUIDE_CALLBACK(~,~)
-        helpdlg('Coming soon...')
-        % file = sprintf('%s%sXX_GUIDE.pdf', DOC_PATH, filesep);
-        % if ~ismac && isunix 
-        %     cmd = sprintf('evince %s', file);
-        %     system(cmd);
-        % else
-        %     open(file)
-        % end       
+        file = sprintf('%s%sBeamforming_UserGuide.pdf', DOC_PATH, filesep);
+        if ~ismac && isunix 
+            cmd = sprintf('evince %s', file);
+            system(cmd);
+        else
+            open(file)
+        end       
+
     end
 
     function GROUP_GUIDE_CALLBACK(~,~)
