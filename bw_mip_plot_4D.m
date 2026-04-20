@@ -212,13 +212,13 @@ end
 
 FILE_MENU=uimenu('Label','File');
 uimenu(FILE_MENU,'label','Load Imageset (*IMAGES.mat) ...','Accelerator','O','Callback',@loadImageSetCallback);
-
-uimenu(FILE_MENU,'label','Save Images...','separator', 'on','Accelerator','S','Callback',@save_images_Callback);
-SAVE_THRESHOLDED_IMAGE_MENU=uimenu(FILE_MENU,'label','Save Thresholded Image...','Callback',@save_thresholded_image_Callback);
-
-uimenu(FILE_MENU,'label','Save Image List...','Callback',@save_image_list_Callback,'separator', 'on');
-uimenu(FILE_MENU,'label','Save Figure...','Callback',@save_Callback);
-SAVE_MOVIE_AVI_MENU=uimenu(FILE_MENU,'Label','Save as Movie ...','Callback',@saveMovie_Callback,'Accelerator','M');
+% 
+% uimenu(FILE_MENU,'label','Save Images...','separator', 'on','Accelerator','S','Callback',@save_images_Callback);
+% SAVE_THRESHOLDED_IMAGE_MENU=uimenu(FILE_MENU,'label','Save Thresholded Image...','Callback',@save_thresholded_image_Callback);
+% 
+% uimenu(FILE_MENU,'label','Save Image List...','Callback',@save_image_list_Callback,'separator', 'on');
+% uimenu(FILE_MENU,'label','Save Figure...','Callback',@save_Callback);
+% SAVE_MOVIE_AVI_MENU=uimenu(FILE_MENU,'Label','Save as Movie ...','Callback',@saveMovie_Callback,'Accelerator','M');
 
 mriOverlay = uimenu(FILE_MENU,'label','Overlay Images on MRI...','Callback',@openOverlay_Callback, 'separator', 'on');
 render_menu = uimenu(FILE_MENU,'label','Overlay Images on Surface');
@@ -228,7 +228,7 @@ uimenu(render_menu,'label','Surfaces File...','Callback',@plotSurfaceImage);
 uimenu(FILE_MENU,'label','Show Data Parameters...','Callback',@showParameters_callback,'separator', 'on');
 
 uimenu(FILE_MENU,'label','Preferences...','Callback',@prefs_Callback, 'separator', 'on');
-uimenu(FILE_MENU,'label','Print','Callback',@print_Callback,'Accelerator','P', 'separator', 'on');
+% uimenu(FILE_MENU,'label','Print','Callback',@print_Callback,'Accelerator','P', 'separator', 'on');
 uimenu(FILE_MENU,'label','Close','Callback','closereq','Accelerator','W','separator', 'on');
     
 DATA_SOURCE_MENU = uimenu('Label','Data Source');
@@ -555,12 +555,10 @@ end
             coordtype = 0;
             set(SHOW_PEAK_DROPDOWN,'String','CTF Coords (cm)','value',1); % for svl fix type 
             set(render_menu,'enable','off');
-            set(SAVE_THRESHOLDED_IMAGE_MENU,'enable','off');
         else
             coordtype = 2;
             set(SHOW_PEAK_DROPDOWN,'String','MNI Coords (mm) | Talairach Coords (mm) ','value',coordtype);
             set(render_menu,'enable','on');
-            set(SAVE_THRESHOLDED_IMAGE_MENU,'enable','on');
         end
                               
         if negOnly
@@ -580,11 +578,9 @@ end
             step(2) = 1/(numFiles-1);
             % step(2) = 4/(numFiles-1);
             set(LATENCY_SLIDER,'max',numFiles,'Value',1,'sliderStep',step);
-            set(SAVE_MOVIE_AVI_MENU,'enable','on');
         else
             set(LOOP_BUTTON,'visible','off')
             set(LATENCY_SLIDER,'visible','off');
-            set(SAVE_MOVIE_AVI_MENU,'enable','off');
         end
         
         PAR.THRESH = PAR.DATA_MAX * thresholdPercent;
@@ -877,10 +873,6 @@ end
         set(THRESH_SLIDER,'visible','on');
         updateDisplay;
         
-    end
-
-    function print_Callback(~, ~)
-        printdlg('-crossplatform', hMainFigure);
     end
 
 
