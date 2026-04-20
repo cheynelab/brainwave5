@@ -34,7 +34,7 @@
 //              2.7  - Version 3.0beta - fixed bug in saving with expanded filter window - April 23 / 2015
 //              2.8  - Version 3.3 modification - added lineFilter option - pass lineFilterFreq == 0 to disable  Dec 14 / 2016
 //              Version 4.2 bug fix - was using variable type *int* here which resulted in wraparound of byteOffset for large datasets  May31, 2024
-//
+//              Version 5.3 bug fix - April 16, 2026 - ADC channels (sensorType 18) were omitted from filtering!
 // ************************************
 
 #include "mex.h"
@@ -704,7 +704,9 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[] )
             
                 // ** don't filter digital channels
                 // filter data - need to byte swap and convert to floating point
-                if (dsParams.channel[k].isSensor || dsParams.channel[k].isReference || dsParams.channel[k].isEEG )
+                // April 16, 2026 - ADC channels (sensorType 18) were omitted from filtering!
+
+                if (dsParams.channel[k].isSensor || dsParams.channel[k].isReference || dsParams.channel[k].isEEG || dsParams.channel[k].sensorType == 18  )
                 {
                     for (int j=0; j<windowPts; j++)
                     {

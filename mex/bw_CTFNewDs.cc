@@ -4,6 +4,7 @@
 //		(currently assumes these are in a contiguous block after MEG channels)
 //
 // 		D. Cheyne  Dec, 2020
+//      update April 16,2026 - include ADC channels for filtering!
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "mex.h"
@@ -16,8 +17,8 @@
 #include "../src/meglib/headers/path.h"
 #include "bw_version.h"
 
-const double	VERSION_NO = 4.2;					// Version
-char const      *RELEASE_DATE = "Nov-15-2023";
+const double	VERSION_NO = 4.3;					// Version
+char const      *RELEASE_DATE = "April-16-2026";
 
 
 ds_params         dsParams;
@@ -522,7 +523,8 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[] )
                 for (int k=0; k<dsParams.numChannels; k++)
                 {
                     // if not digital replace data with filtered data
-                    if (dsParams.channel[k].isSensor || dsParams.channel[k].isReference || dsParams.channel[k].isEEG )
+                    // April 16, 2026 - ADC channels (sensorType 18) were omitted from filtering!
+                    if (dsParams.channel[k].isSensor || dsParams.channel[k].isReference || dsParams.channel[k].isEEG || dsParams.channel[k].sensorType == 18)
                     {
                         for (int j=0; j<dsParams.numSamples; j++)
                             channelData[j] = DE_trialArray[k][j];
