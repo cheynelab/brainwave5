@@ -22,7 +22,7 @@
     fig_handles = [];
 
     BW_VERSION = 5.3;
-    RELEASE_DATE = 'April 20, 2026';
+    RELEASE_DATE = 'April 21, 2026';
     
     % check Matlab version
     versionStr = version;
@@ -229,7 +229,7 @@
     uimenu(GUIDE_MENU,'label','QuickStart Guide...','Callback',@BW_GUIDE_CALLBACK);
     uimenu(GUIDE_MENU,'label','DataPlot / Dipole Fit...','separator','on','Callback',@DIPOLE_GUIDE_CALLBACK);
     uimenu(GUIDE_MENU,'label','Beamformer Analysis...','Callback',@BEAM_GUIDE_CALLBACK);
-    uimenu(GUIDE_MENU,'label','Group Analysis...','Callback',@GROUP_GUIDE_CALLBACK);
+    uimenu(GUIDE_MENU,'label','Virtual Sensor Analysis...','Callback',@VS_GUIDE_CALLBACK);
     uimenu(HELP_MENU,'label','About Brainwave...','separator','on','Callback',@ABOUT_MENU_CALLBACK);
 
     
@@ -272,9 +272,9 @@
 
     end
 
-    function GROUP_GUIDE_CALLBACK(~,~)
+    function VS_GUIDE_CALLBACK(~,~)
         helpdlg('Coming soon...')
-        % file = sprintf('%s%sXX_GUIDE.pdf', DOC_PATH, filesep);
+        % file = sprintf('%s%sVIRTUAL_SENSOR_GUIDE.pdf', DOC_PATH, filesep);
         % if ~ismac && isunix 
         %     cmd = sprintf('evince %s', file);
         %     system(cmd);
