@@ -55,7 +55,7 @@ function bw_plot_tfr(TFR_ARRAY, plotTimeCourse, groupLabel, filename)
     % uimenu(BRAINWAVE_MENU,'label','Plot parameters...','Callback',@change_baseline_callback);
     uimenu(BRAINWAVE_MENU,'label','Add TFR data...','Callback',@open_tfr_callback);
     uimenu(BRAINWAVE_MENU,'label','Save TFR data...','Callback',@save_tfr_data_callback);
-    SAVE_TIMECOURSE_MENU = uimenu(BRAINWAVE_MENU,'label','Save Time Course ...','Callback',@save_timecourse_callback);
+    SAVE_TIMECOURSE_MENU = uimenu(BRAINWAVE_MENU,'label','Export Time Courses ...','Callback',@save_timecourse_callback);
 
     COLOR_MENU = uimenu(BRAINWAVE_MENU,'label','Change Plot Colour','enable','off','separator','on', 'Callback',@plot_color_callback);
     uimenu(BRAINWAVE_MENU,'label','Change Line Thickness', 'Callback',@thickness_callback);
@@ -158,8 +158,10 @@ function bw_plot_tfr(TFR_ARRAY, plotTimeCourse, groupLabel, filename)
 
         if plotTimeCourse && numSubjects > 1
             set(ERROR_BAR_MENU,'enable','on');
+            set(SAVE_TIMECOURSE_MENU,'enable','on');
         else
             set(ERROR_BAR_MENU,'enable','off');
+            set(SAVE_TIMECOURSE_MENU,'enable','off');
         end
 
         updatePlot;
@@ -523,28 +525,71 @@ function bw_plot_tfr(TFR_ARRAY, plotTimeCourse, groupLabel, filename)
 
     end
 
-
     function save_timecourse_callback(~,~)      
-        if isempty(timeCourse)
+        if isempty(timeCourse) || ~plotTimeCourse
             return;
         end
-        
-        [name,path,~] = uiputfile({'*.txt','ASCII file (*.txt)';},...
-                    'Export time course data to:');
+             
+        [name,path,idx] = uiputfile({'*.mat','MAT-file (*.mat)';'*.txt','ASCII file (*.txt)';},...
+                    'Export virtual sensor data to:');
         if isequal(name,0)
             return;
         end
-
+        
         filename = fullfile(path,name);
-        fprintf('Saving time course to file %s\n', filename);
-        fid = fopen(filename,'w');
-        for k=1:size(timeCourse,1)
-            fprintf(fid, '%.4f', timeVec(k) );
-            fprintf(fid, '\t%8.4f', timeCourse(k) );
-            fprintf(fid,'\n');
+                
+        if idx == 1
+            saveMatFile = true;
+        else
+            saveMatFile = false;
         end
 
-        fclose(fid);
+       if saveMatFile   
+            fprintf('Saving virtual sensor data to file %s\n', filename); 
+            for k=1:numSubjects                    
+                data = fdata(k,:); 
+                vsdata.subjects{k}.timeVec = timeVec;
+                vsdata.subjects{k}.label = TFR_ARRAY{k}.plotLabel;
+                vsdata.subjects{k}.data = single(data');                 
+            end
+            save(filename,'-struct','vsdata');
+        else
+            % put ascii data in separate files but don't overwrite 
+            for k=1:numSubjects
+                data = fdata{k};
+                [path, name, ~] = bw_fileparts(filename); 
+                tname = sprintf('%s_%s.txt', name, char(labels{k}));
+                tFileName = fullfile(path,tname);
+                fprintf('Saving virtual sensor data to file %s\n', tFileName); 
+                fid = fopen(tFileName,'w');
+                for t=1:size(data,2)
+                    fprintf(fid, '%.4f', timeVec(t) );
+                    for j=1:size(data,1)
+                        fprintf(fid, '\t%8.4f', data(j,t) );
+                    end   
+                    fprintf(fid,'\n');
+                end
+                fclose(fid);     
+            end                  
+        end
+
+        % 
+        % [name,path,~] = uiputfile({'*.txt','ASCII file (*.txt)';},...
+        %             'Export time course data to:');
+        % if isequal(name,0)
+        %     return;
+        % end
+        % 
+        % filename = fullfile(path,name);
+        % fprintf('Saving time course to file %s\n', filename);
+        % fid = fopen(filename,'w');
+        % for k=1:size(timeCourse,1)
+        %     fprintf(fid, '%.4f', timeVec(k) );
+        %     fprintf(fid, '\t%8.4f', timeCourse(k) );
+        %     fprintf(fid,'\n');
+        % end
+
+        % fclose(fid);
 
     end
 

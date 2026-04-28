@@ -22,7 +22,7 @@
     fig_handles = [];
 
     BW_VERSION = 5.3;
-    RELEASE_DATE = 'April 21, 2026';
+    RELEASE_DATE = 'April 27, 2026';
     
     % check Matlab version
     versionStr = version;
@@ -273,14 +273,13 @@
     end
 
     function VS_GUIDE_CALLBACK(~,~)
-        helpdlg('Coming soon...')
-        % file = sprintf('%s%sVIRTUAL_SENSOR_GUIDE.pdf', DOC_PATH, filesep);
-        % if ~ismac && isunix 
-        %     cmd = sprintf('evince %s', file);
-        %     system(cmd);
-        % else
-        %     open(file)
-        % end       
+        file = sprintf('%s%sVirtualSensor_UserGuide.pdf', DOC_PATH, filesep);
+        if ~ismac && isunix 
+            cmd = sprintf('evince %s', file);
+            system(cmd);
+        else
+            open(file)
+        end       
     end
 
     function OPEN_STUDY_CALLBACK(~,~)
